@@ -35,6 +35,12 @@ class Parenthesis(Node):
         Node.__init__(self)
         self.child = None
 
+class FieldAccess(Node):
+    def __init__(self, obj, field):
+        Node.__init__(self)
+        self.obj = obj
+        self.field = field
+
 class Call(Node):
     def __init__(self, func_node, *args):
         Node.__init__(self)
@@ -124,4 +130,8 @@ class Switch(Node):
         Node.__init__(self)
         self.conditions = conditions
 
+class Neko(Node):
+    def __init__(self, code):
+        Node.__init__(self)
+        self.code = code
 

@@ -2,7 +2,7 @@ import xml.etree.cElementTree as etree # TODO: what if there is no cElementTree,
 
 from .visitor import Visitor
 
-def make_element(node, tag, add=None, **kwargs):
+def make_element(node, tag, add=None, text='', **kwargs):
     """
         kwargs will be modified in-place.
     """
@@ -14,6 +14,8 @@ def make_element(node, tag, add=None, **kwargs):
     elem = etree.Element(tag, kwargs)
     if add is not None:
         map(elem.append, add)
+    if text:
+        elem.text = text
     return elem
 
 class XMLVisitor(Visitor):
@@ -51,3 +53,11 @@ class XMLVisitor(Visitor):
     def visit_Call(self, node):
         return make_element(node, 'c',
                 map(self.visit, [node.func] + node.args))
+
+    def visit_FieldAccess(self, node):
+        return make_element(node, 'g',
+                [self.visit(node.obj)], v=node.field)
+
+    def visit_Neko(self, node):
+        return make_element(node, 'neko',
+                text=node.code)
