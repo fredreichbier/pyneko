@@ -1,6 +1,7 @@
 class Node(object):
     def __init__(self):
-        self.position = ':' # workaround, see http://lists.motion-twin.com/pipermail/neko/2009-January/002481.html
+        self.position = ':' 
+        # workaround, see http://lists.motion-twin.com/pipermail/neko/2009-January/002481.html
 
 class LiteralInteger(Node):
     def __init__(self, value=0):
@@ -23,17 +24,17 @@ class Identifier(Node):
         self.value = value
 
 class Block(Node):
-    def __init__(self, *children):
+    def __init__(self, children):
         Node.__init__(self)
-        self.children = list(children)
-    
+        self.children = children
+
     def add_child(self, node):
         self.children.append(node)
 
 class Parenthesis(Node):
-    def __init__(self, child=None):
+    def __init__(self, child):
         Node.__init__(self)
-        self.child = None
+        self.child = child 
 
 class FieldAccess(Node):
     def __init__(self, obj, field):
@@ -42,10 +43,10 @@ class FieldAccess(Node):
         self.field = field
 
 class Call(Node):
-    def __init__(self, func_node, *args):
+    def __init__(self, func_node, args):
         Node.__init__(self)
         self.func = func_node
-        self.args = list(args)
+        self.args = args
 
 class ArrayAccess(Node):
     def __init__(self, elem, index):
@@ -55,6 +56,10 @@ class ArrayAccess(Node):
 
 class Var(Node):
     def __init__(self, vars):
+        """
+            :param vars: a dictionary 
+                         {name (python str): value (ast node or None) }
+        """
         Node.__init__(self)
         self.vars = vars
 
@@ -86,6 +91,11 @@ class BinaryOp(Node):
 
 class Try(Node):
     def __init__(self, value, try_, catch):
+        """
+            :param value: The exception name to catch
+            :param try_: The statement to try
+            :param catch: The statement to be executed if *value* was caught.
+        """
         Node.__init__(self)
         self.value = value
         self.try_ = try_
@@ -118,17 +128,31 @@ class Next(Node):
 
 class Label(Node):
     def __init__(self, label):
+        """
+            :param label: the label name as string
+        """
         Node.__init__(self)
         self.label = label
 
 class Switch(Node):
-    def __init__(self, conditions):
+    def __init__(self, control, conditions):
         """
+            :param control: The control variable node of the switch statement.
             :param conditions: a dict {cond node: body node} of cases,
-            cond node = 'default' is the default option.
+                               cond node = 'default' is the default option.
         """
         Node.__init__(self)
+        self.control = control
         self.conditions = conditions
+
+class Object(Node):
+    def __init__(self, members):
+        """
+            Object literal
+            :param members: a dictionary of {name: node}
+        """
+        Node.__init__(self)
+        self.members = members
 
 class Neko(Node):
     def __init__(self, code):

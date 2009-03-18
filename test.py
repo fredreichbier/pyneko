@@ -6,21 +6,22 @@ from pyneko.xmlvisitor import XMLVisitor
 
 from xml.etree.ElementTree import tostring
 
-ast = Call(
-        Function(['a'],
-        Block(
-                Call(Identifier('$print'),
-                    BinaryOp('+', 
-                        BinaryOp('+', 
-                            Identifier('a'), 
-                            LiteralInteger(5)
-                        ),
-                    LiteralString('\n')
-                    )
-                )
-        )
-    ),
-    LiteralInteger(3)
+ast = BinaryOp('=',
+       Identifier('fib'),
+       Function(['n'],
+           If(
+               BinaryOp('<=', Identifier('n'), LiteralInteger(1)),
+               LiteralInteger(1),
+               BinaryOp('+',
+                   Call(Identifier('fib'),
+                       [BinaryOp('-', Identifier('n'), LiteralInteger(1))]
+                   ),
+                   Call(Identifier('fib'),
+                       [BinaryOp('-', Identifier('n'), LiteralInteger(2))]
+                   )
+               )
+           )
+     )
 )
 
 FILENAME = 'test.neko'
