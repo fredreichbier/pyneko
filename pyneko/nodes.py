@@ -1,6 +1,6 @@
 class Node(object):
     def __init__(self):
-        self.position = ':' 
+        self.position = ':'
         # workaround, see http://lists.motion-twin.com/pipermail/neko/2009-January/002481.html
 
 class LiteralInteger(Node):
@@ -34,7 +34,7 @@ class Block(Node):
 class Parenthesis(Node):
     def __init__(self, child):
         Node.__init__(self)
-        self.child = child 
+        self.child = child
 
 class FieldAccess(Node):
     def __init__(self, obj, field):
@@ -57,7 +57,7 @@ class ArrayAccess(Node):
 class Var(Node):
     def __init__(self, vars):
         """
-            :param vars: a dictionary 
+            :param vars: a dictionary
                          {name (python str): value (ast node or None) }
         """
         Node.__init__(self)

@@ -1,4 +1,4 @@
-import lxml.etree as etree 
+import lxml.etree as etree
 
 from .visitor import Visitor
 
@@ -53,7 +53,7 @@ class XMLVisitor(Visitor):
                 map(self.visit, [node.func] + node.args))
 
     def visit_ArrayAccess(self, node):
-        return make_element(node, 'a', 
+        return make_element(node, 'a',
                 [self.visit(node.elem), self.visit(node.index)])
 
     def visit_Var(self, node):
@@ -85,7 +85,7 @@ class XMLVisitor(Visitor):
                 [self.visit(node.body),
                 self.visit(node.cond)]
                 )
-    
+
     def visit_If(self, node):
         args = [self.visit(node.cond), self.visit(node.body)]
         if node.else_body is not None:
@@ -123,12 +123,12 @@ class XMLVisitor(Visitor):
         return make_element(node, 'continue')
 
     def visit_Next(self, node):
-        return make_element(node, 'next', 
+        return make_element(node, 'next',
                 [self.visit(node.e1), self.visit(node.e2)])
 
     def visit_Label(self, node):
         return make_element(node, 'label', v=node.label)
-   
+
     def visit_Switch(self, node):
         nodes = [self.visit(node.control)]
         for name, exp in node.conditions.iteritems():
