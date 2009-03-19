@@ -6,23 +6,36 @@ from pyneko.xmlvisitor import XMLVisitor
 
 from xml.etree.ElementTree import tostring
 
-ast = BinaryOp('=',
-       Identifier('fib'),
-       Function(['n'],
-           If(
-               BinaryOp('<=', Identifier('n'), LiteralInteger(1)),
-               LiteralInteger(1),
-               BinaryOp('+',
-                   Call(Identifier('fib'),
-                       [BinaryOp('-', Identifier('n'), LiteralInteger(1))]
-                   ),
-                   Call(Identifier('fib'),
-                       [BinaryOp('-', Identifier('n'), LiteralInteger(2))]
-                   )
-               )
-           )
-     )
-)
+# equivalent to:
+# greet = function(what)
+#    $print(("Hello " + what) + "!\n")
+# greet("Neko");
+# -> Hello Neko!
+
+ast = Block([
+        BinaryOp('=',
+            Identifier('greet'),
+            Function(['what'],
+                Call(
+                    Identifier('$print'),
+                    [
+                        BinaryOp('+',
+                            BinaryOp('+',
+                                LiteralString('Hello '),
+                                Identifier('what')
+                            ),
+                            LiteralString('!\n')
+                        )
+                    ]
+                    )
+                )
+            ),
+        Call(
+            Identifier('greet'),
+            [LiteralString('Neko')]
+            )
+        ])
+
 
 FILENAME = 'test.neko'
 with open(FILENAME, 'w') as f:
